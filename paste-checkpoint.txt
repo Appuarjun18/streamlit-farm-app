@@ -1,0 +1,25 @@
+import pandas as pd
+
+# Replace 'paste.txt' with your actual filename and correct delimiter/format
+# If CSV: df = pd.read_csv('paste.txt')
+# If tab-separated: df = pd.read_csv('paste.txt', delimiter='\t')
+# If fixed column width: df = pd.read_fwf('paste.txt')
+
+df_external = pd.read_csv('paste.txt')  # or adjust for file format
+
+st.sidebar.header("Choose a record from real sensor data")
+row_idx = st.sidebar.number_input("Row number", min_value=0, max_value=len(df_external)-1, value=0)
+
+selected = df_external.iloc[row_idx]
+
+input_features = {
+    'temperature': selected['temperature'],
+    'humidity': selected['humidity'],
+    'soil_pH': selected['soil_pH'],
+    'organic_matter': selected['organic_matter'],
+    'nitrogen': selected['nitrogen'],
+    'growth_progress_days': selected['growth_progress_days']
+}
+
+pred_yield = predict_yield_scenario(input_features)
+st.markdown(f"### Predicted Yield (kg/ha) from file: {pred_yield:.2f}")
